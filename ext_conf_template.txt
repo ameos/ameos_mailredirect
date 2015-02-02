@@ -1,0 +1,5 @@
+# cat=Configuration; type=boolean; label=Activate mail redirection
+activate = 
+
+# cat=Configuration; type=string; label=Recipient
+recipient = 
