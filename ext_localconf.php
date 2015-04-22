@@ -8,6 +8,8 @@ $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ameos_mailredirect'] = unserialize($_EXT
 if($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ameos_mailredirect']['activate'] == 1) {
 	$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['\\TYPO3\\CMS\\Core\\Mail\\MailMessage'] = array('className' => 'Ameos\\AmeosMailredirect\\Xclass\\Mail\\MailMessage');
 	$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Core\\Mail\\MailMessage'] = array('className' => 'Ameos\\AmeosMailredirect\\Xclass\\Mail\\MailMessage');
+	$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['t3lib_mail_Message'] = array('className' => 'Ameos\\AmeosMailredirect\\Xclass\\Mail\\MailMessage');
+	$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['\\t3lib_mail_Message'] = array('className' => 'Ameos\\AmeosMailredirect\\Xclass\\Mail\\MailMessage');
 }
 
 
