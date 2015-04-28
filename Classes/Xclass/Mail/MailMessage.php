@@ -41,4 +41,22 @@ class MailMessage extends \TYPO3\CMS\Core\Mail\MailMessage {
 		$body.= '<br /><hr /><br />This mail must be sent to : ' . implode(';', array_keys($this->originalRecipient));
 		return $body;
 	}
+
+    
+
+    /**
+     * Set the subject of this message.
+     *
+     * @param string $subject
+     *
+     * @return Ameos\AmeosMailredirect\Xclass\Mail\MailMessage
+     */
+    public function setSubject($subject) {
+		$prefix = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ameos_mailredirect']['subject_prefix'];
+		if(trim($prefix) !== '') {
+			$subject = trim($prefix) . ' ' . $subject;
+		}
+		parent::setSubject($subject);
+		return $this;
+	}
 }

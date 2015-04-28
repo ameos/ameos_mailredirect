@@ -1,5 +1,8 @@
-# cat=Configuration; type=boolean; label=Activate mail redirection
+# cat=Configuration; type=boolean; label=LLL:EXT:ameos_mailredirect/Resources/Private/Language/locallang.xlf:settings.activate
 activate = 
 
-# cat=Configuration; type=string; label=Recipient
+# cat=Configuration; type=string; label=LLL:EXT:ameos_mailredirect/Resources/Private/Language/locallang.xlf:settings.recipient
 recipient = 
+
+# cat=Configuration; type=string; label=LLL:EXT:ameos_mailredirect/Resources/Private/Language/locallang.xlf:settings.subject_prefix
+subject_prefix = 
