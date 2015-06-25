@@ -2,7 +2,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title'            => 'Mail redirect for debug',
-	'description'      => '',
+	'description'      => 'This extension redirect all mail send with TYPO3 API to a debug address for developpement period.',
 	'category'         => 'misc',
 	'author'           => 'Ameos',
 	'author_email'     => 'typo3dev@ameos.com',
@@ -19,7 +19,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'clearCacheOnLoad' => 0,
 	'lockType'         => '',
 	'author_company'   => '',
-	'version'          => '1.0.0',
+	'version'          => '1.1.1',
 	'constraints'      => array(
 		'depends'      => array (
 			'php' => '5.3.3-5.6.99',
