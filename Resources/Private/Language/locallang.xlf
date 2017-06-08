@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2012-09-13T15:40:13Z" product-name="ameos_mailredirect">
-		<header/>
-		<body>
-			<trans-unit id="settings.activate" xml:space="preserve"><source>Activate mail redirection</source></trans-unit>
-			<trans-unit id="settings.recipient" xml:space="preserve"><source>Recipient</source></trans-unit>
-			<trans-unit id="settings.subject_prefix" xml:space="preserve"><source>Subject prefix</source></trans-unit>
-		</body>
-	</file>
+    <file source-language="en" datatype="plaintext" original="messages" date="2012-09-13T15:40:13Z" product-name="ameos_mailredirect">
+        <header/>
+        <body>
+            <trans-unit id="settings.activate" xml:space="preserve"><source>Activate mail redirection</source></trans-unit>
+            <trans-unit id="settings.recipient" xml:space="preserve"><source>Recipient</source></trans-unit>
+            <trans-unit id="settings.subject_prefix" xml:space="preserve"><source>Subject prefix</source></trans-unit>
+        </body>
+    </file>
 </xliff>
