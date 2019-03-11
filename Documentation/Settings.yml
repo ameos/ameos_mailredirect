@@ -10,8 +10,8 @@
 conf.py:
   copyright: 2014-2015
   project: Ameos Mail redirect
-  version: 1.0
-  release: 1.0.0
+  version: 1.1
+  release: 1.1.5
   html_theme_options:
     github_repository: ameos/ameos_mailredirect
     github_branch: master

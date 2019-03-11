@@ -8,7 +8,7 @@ Ameos Mail redirect
 		ameos_mailredirect
 
 	:Version:
-		1.0.0
+		1.1.5
 
 	:Language:
 		en

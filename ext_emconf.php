@@ -1,10 +1,10 @@
 <?php
 
-$EM_CONF[$_EXTKEY] = array(
+$EM_CONF[$_EXTKEY] = [
     'title'            => 'Mail redirect for debug',
     'description'      => 'This extension redirect all mail send with TYPO3 API to a debug address for developpement period.',
     'category'         => 'misc',
-    'author'           => 'Ameos',
+    'author'           => 'Ameos Team',
     'author_email'     => 'typo3dev@ameos.com',
     'shy'              => '',
     'dependencies'     => '',
@@ -18,15 +18,14 @@ $EM_CONF[$_EXTKEY] = array(
     'modify_tables'    => '',
     'clearCacheOnLoad' => 0,
     'lockType'         => '',
-    'author_company'   => '',
-    'version'          => '1.1.4',
-    'constraints'      => array(
-        'depends'      => array (
-            'typo3' => '6.2.0-8.7.99',
-            'php'   => '5.5.0-7.1.99'
-        ),
-        'conflicts' => array(),
-        'suggests'  => array(),
-    ),
-    'suggests' => array(),
-);
+    'author_company'   => 'Ameos',
+    'version'          => '1.1.5',
+    'constraints'      => [
+        'depends'      => [
+            'typo3' => '8.7.0-9.5.99',
+            'php'   => '5.5.0-7.2.99'
+        ],
+        'conflicts' => [],
+        'suggests'  => [],
+    ],
+];
