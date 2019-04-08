@@ -16,13 +16,23 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * The TYPO3 project - inspiring people to share!
  */
 
-class MailMessage extends \TYPO3\CMS\Core\Mail\MailMessage 
+class MailMessage extends \TYPO3\CMS\Core\Mail\MailMessage
 {
 
     /**
      * @var array original recipient
-     */ 
-    protected $originalRecipient;
+     */
+    protected $originalRecipient = [];
+
+    /**
+     * @var array original CC addresses
+     */
+    protected $originalCc = [];
+
+    /**
+     * @var array original BCC addresses
+     */
+    protected $originalBcc = [];
 
     /**
      * Get the To addresses of this message.
@@ -32,7 +42,10 @@ class MailMessage extends \TYPO3\CMS\Core\Mail\MailMessage
     public function getTo()
     {
         $this->originalRecipient = parent::getTo();
-        $addresses = array();
+        if (is_null($this->originalRecipient)) {
+            $this->originalRecipient = [];
+        }
+        $addresses = [];
         $recipients = GeneralUtility::trimExplode(';', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ameos_mailredirect']['recipient']);
         foreach ($recipients as $recipient) {
             $addresses[$recipient] = '';
@@ -44,16 +57,47 @@ class MailMessage extends \TYPO3\CMS\Core\Mail\MailMessage
     }
 
     /**
+     * Get the CC addresses of this message.
+     *
+     * @return array
+     */
+    public function getCc()
+    {
+        $this->originalCc = parent::getCc();
+        if (is_null($this->originalCc)) {
+            $this->originalCc = [];
+        }
+        return [];
+    }
+
+    /**
+     * Get the BCC addresses of this message.
+     *
+     * @return array
+     */
+    public function getBcc()
+    {
+        $this->originalBcc = parent::getBcc();
+        if (is_null($this->originalBcc)) {
+            $this->originalBcc = [];
+        }
+        return [];
+    }
+
+    /**
      * Get the body content of this entity as a string.
      *
      * Returns NULL if no body has been set.
      *
      * @return string|null
      */
-    public function getBody() 
+    public function getBody()
     {
         $body = parent::getBody();
-        $body.= '<br /><hr /><br />This mail must be sent to : ' . implode(';', array_keys($this->originalRecipient));
+        $body .= '<br /><hr /><br />This mail must be sent';
+        $body .= '<br/>as TO: ' . implode(';', array_keys($this->originalRecipient));
+        $body .= '<br/>as CC: ' . implode(';', array_keys($this->originalCc));
+        $body .= '<br/>as BCC: ' . implode(';', array_keys($this->originalBcc));
         return $body;
     }
 
@@ -64,7 +108,7 @@ class MailMessage extends \TYPO3\CMS\Core\Mail\MailMessage
      *
      * @return Ameos\AmeosMailredirect\Xclass\Mail\MailMessage
      */
-    public function setSubject($subject) 
+    public function setSubject($subject)
     {
         $prefix = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ameos_mailredirect']['subject_prefix'];
         if (trim($prefix) !== '') {
