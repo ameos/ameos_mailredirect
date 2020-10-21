@@ -5,7 +5,7 @@
         <body>
             <trans-unit id="settings.activate" xml:space="preserve">
                 <source>Activate mail redirection</source>
-                <target>Activé la redirection des mails</target>
+                <target>Activer la redirection des mails</target>
             </trans-unit>
             <trans-unit id="settings.recipient" xml:space="preserve">
                 <source>Recipient</source>
@@ -14,6 +14,15 @@
             <trans-unit id="settings.subject_prefix" xml:space="preserve">
                 <source>Subject prefix</source>
                 <target>Préfixer le sujet</target>
+            </trans-unit>
+
+            <trans-unit id="settings.copy.activate" xml:space="preserve">
+                <source>Activate hidden mail copy</source>
+                <target>Activer la copie cachée des emails </target>
+            </trans-unit>
+            <trans-unit id="settings.copy.recipient" xml:space="preserve">
+                <source>Hidden copy recipient</source>
+                <target>Destinataire des copies cachées</target>
             </trans-unit>
         </body>
     </file>

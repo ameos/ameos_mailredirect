@@ -2,6 +2,7 @@
 namespace Ameos\AmeosMailredirect\Xclass\Mail;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MailUtility;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -35,11 +36,62 @@ class MailMessage extends \TYPO3\CMS\Core\Mail\MailMessage
     protected $originalBcc = [];
 
     /**
-     * Get the To addresses of this message.
-     *
-     * @return array
      */
-    public function getTo()
+    private function initializeMailer()
+    {
+        $this->mailer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Mail\Mailer::class);
+    }
+
+    /**
+     * Sends the message.
+     *
+     * @return int the number of recipients who were accepted for delivery
+     */
+    public function send()
+    {
+        if($this->isRedirectEnabled())
+        {
+            $this->updateTo();
+            $this->updateCc();
+            $this->updateBcc();
+            $this->updateSubject();
+        }
+        if($this->isCopyEnabled())
+        {
+            $configuredBccs = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ameos_mailredirect']['copy.']['recipient'];
+            // Must use setBcc before addBcc
+            $this->setBcc(parent::getBcc());
+            foreach(explode(';', $configuredBccs) as $newBcc)
+            {
+                $this->addBcc($newBcc);
+            }
+        }
+        
+        // Ensure to always have a From: header set
+        if (empty($this->getFrom())) {
+            $this->setFrom(MailUtility::getSystemFrom());
+        }
+        if(version_compare(TYPO3_branch, '9', '>='))
+        {
+            if (empty($this->getReplyTo())) {
+                $replyTo = MailUtility::getSystemReplyTo();
+                if (!empty($replyTo)) {
+                    $this->setReplyTo($replyTo);
+                }
+            }
+        }
+        $this->initializeMailer();
+        $this->sent = true;
+        $this->getHeaders()->addTextHeader('X-Mailer', $this->mailerHeader);
+        return $this->mailer->send($this, $this->failedRecipients);
+    }
+
+    /**
+     * Update the To addresses of this message.
+     *
+     * @return void
+     */
+    public function updateTo()
     {
         $this->originalRecipient = parent::getTo();
         if (is_null($this->originalRecipient)) {
@@ -48,40 +100,41 @@ class MailMessage extends \TYPO3\CMS\Core\Mail\MailMessage
         $addresses = [];
         $recipients = GeneralUtility::trimExplode(';', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ameos_mailredirect']['recipient']);
         foreach ($recipients as $recipient) {
-            $addresses[$recipient] = '';
+            $addresses[$recipient] = $recipient;
         }
         if (!$this->_setHeaderFieldModel('To', $addresses)) {
             $this->getHeaders()->addMailboxHeader('To', $addresses);
         }
-        return $addresses;
+        
+        parent::setTo($addresses);
     }
 
     /**
-     * Get the CC addresses of this message.
+     * Update the CC addresses of this message.
      *
-     * @return array
+     * @return void
      */
-    public function getCc()
+    public function updateCc()
     {
         $this->originalCc = parent::getCc();
         if (is_null($this->originalCc)) {
             $this->originalCc = [];
         }
-        return [];
+        parent::setCc([]);
     }
 
     /**
-     * Get the BCC addresses of this message.
+     * Update the BCC addresses of this message.
      *
-     * @return array
+     * @return void
      */
-    public function getBcc()
+    public function updateBcc()
     {
         $this->originalBcc = parent::getBcc();
         if (is_null($this->originalBcc)) {
             $this->originalBcc = [];
         }
-        return [];
+        parent::setBcc([]);
     }
 
     /**
@@ -94,27 +147,50 @@ class MailMessage extends \TYPO3\CMS\Core\Mail\MailMessage
     public function getBody()
     {
         $body = parent::getBody();
-        $body .= '<br /><hr /><br />This mail must be sent';
-        $body .= '<br/>as TO: ' . implode(';', array_keys($this->originalRecipient));
-        $body .= '<br/>as CC: ' . implode(';', array_keys($this->originalCc));
-        $body .= '<br/>as BCC: ' . implode(';', array_keys($this->originalBcc));
+        if($this->isRedirectEnabled())
+        {
+            $body .= '<br /><hr /><br />This mail must be sent';
+            $body .= '<br/>as TO: ' . implode(';', array_keys($this->originalRecipient));
+            $body .= '<br/>as CC: ' . implode(';', array_keys($this->originalCc));
+            $body .= '<br/>as BCC: ' . implode(';', array_keys($this->originalBcc));
+        }
         return $body;
     }
-
+    
     /**
-     * Set the subject of this message.
+     * Update the subject of this message.
      *
      * @param string $subject
      *
-     * @return Ameos\AmeosMailredirect\Xclass\Mail\MailMessage
+     * @return void
      */
-    public function setSubject($subject)
+    public function updateSubject()
     {
+        $subject = parent::getSubject();
         $prefix = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ameos_mailredirect']['subject_prefix'];
         if (trim($prefix) !== '') {
             $subject = trim($prefix) . ' ' . $subject;
         }
         parent::setSubject($subject);
-        return $this;
+    }
+
+    /**
+     * Check if redirection is enabled or not
+     * 
+     * @return bool
+     */
+    private function isRedirectEnabled()
+    {
+        return $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ameos_mailredirect']['activate'] == 1;
+    }
+
+    /**
+     * Check if extra bcc is enabled or not
+     * 
+     * @return bool
+     */
+    private function isCopyEnabled()
+    {
+        return $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ameos_mailredirect']['copy.']['activate'] == 1;
     }
 }

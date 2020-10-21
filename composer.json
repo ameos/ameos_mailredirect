@@ -4,7 +4,7 @@
     "type": "typo3-cms-extension",
     "homepage": "https://github.com/ameos/ameos_mailredirect",
     "require": {
-        "typo3/cms-core": "^8.7 | ^9 | dev-master",
+        "typo3/cms-core": "^8.7 | ^9 | ^10 | dev-master",
         "php": ">=7.0.0"
     },
     "keywords": [
@@ -24,6 +24,6 @@
         "psr-4": {
             "Ameos\\AmeosMailredirect\\": "Classes"
         }
-    }
+    },
+    "version": "1.2.0"
 }
-
