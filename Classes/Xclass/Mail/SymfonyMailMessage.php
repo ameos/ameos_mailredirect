@@ -4,6 +4,8 @@ namespace Ameos\AmeosMailredirect\Xclass\Mail;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Mail\Mailer;
 use Symfony\Component\Mime\Part\AbstractPart;
+use Symfony\Component\Mime\Part\Multipart\MixedPart;
+use Symfony\Component\Mime\Part\TextPart;
 use Symfony\Component\Mime\Address;
 
 /*
@@ -141,30 +143,22 @@ class SymfonyMailMessage extends \TYPO3\CMS\Core\Mail\MailMessage
     {
         if($this->isRedirectEnabled())
         {
-            $textPart = parent::getBody();
-            $bodyText = $textPart->bodyToString();
-            $bodyText .= '<br /><hr /><br />This mail must be sent';
-            $bodyText .= '<br/>as TO: ' . $this->parseSymfonyAddressesToString($this->originalRecipient);
-            $bodyText .= '<br/>as CC: ' . $this->parseSymfonyAddressesToString($this->originalCc);
-            $bodyText .= '<br/>as BCC: ' . $this->parseSymfonyAddressesToString($this->originalBcc);
-
-            $charset = 'utf-8';
-            if($textPart->getPreparedHeaders()->has('content-type'))
-            {
-                if(array_key_exists('charset', $textPart->getPreparedHeaders()->get('content-type')->getParameters()))
-                {
-                    $charset = $textPart->getPreparedHeaders()->get('content-type')->getParameters()['charset'];
+            $abstractPart = parent::getBody();
+            if(get_class($abstractPart) == 'Symfony\Component\Mime\Part\TextPart') {
+                $abstractPart = $this->updateTextPart($abstractPart);
+            } else if(get_class($abstractPart) == 'Symfony\Component\Mime\Part\Multipart\MixedPart') {
+                $parts = $abstractPart->getParts();
+                $newParts = [];
+                foreach($parts as $part) {
+                    if(get_class($part) == 'Symfony\Component\Mime\Part\TextPart') {
+                        $newParts[] = $this->updateTextPart($part);
+                    } else {
+                        $newParts[] = $part;
+                    }
                 }
+                $abstractPart = GeneralUtility::makeInstance(MixedPart::class, ...$newParts);
             }
-            $encoding = null;
-            if($textPart->getPreparedHeaders()->has('content-transfer-encoding'))
-            {
-                $encoding = $textPart->getPreparedHeaders()->get('content-transfer-encoding')->getValue();
-            }
-
-            $newTextPart = GeneralUtility::makeInstance(\Symfony\Component\Mime\Part\TextPart::class, $bodyText, $charset, $textPart->getMediaSubtype(), $encoding);
-
-            return $newTextPart;
+            return $abstractPart;
         }
         else
         {
@@ -187,6 +181,32 @@ class SymfonyMailMessage extends \TYPO3\CMS\Core\Mail\MailMessage
             $subject = trim($prefix) . ' ' . $subject;
         }
         parent::setSubject($subject);
+    }
+
+    private function updateTextPart(TextPart $part): TextPart
+    {
+        $bodyText = $part->getBody();
+        $bodyText .= '<br /><hr /><br />This mail must be sent';
+        $bodyText .= '<br/>as TO: ' . $this->parseSymfonyAddressesToString($this->originalRecipient);
+        $bodyText .= '<br/>as CC: ' . $this->parseSymfonyAddressesToString($this->originalCc);
+        $bodyText .= '<br/>as BCC: ' . $this->parseSymfonyAddressesToString($this->originalBcc);
+        
+        $charset = 'utf-8';
+
+        if($part->getPreparedHeaders()->has('content-type'))
+        {
+            if(array_key_exists('charset', $part->getPreparedHeaders()->get('content-type')->getParameters()))
+            {
+                $charset = $part->getPreparedHeaders()->get('content-type')->getParameters()['charset'];
+            }
+        }
+        $encoding = null;
+        if($part->getPreparedHeaders()->has('content-transfer-encoding'))
+        {
+            $encoding = $part->getPreparedHeaders()->get('content-transfer-encoding')->getValue();
+        }
+
+        return GeneralUtility::makeInstance(TextPart::class, $bodyText, $charset, $part->getMediaSubtype(), $encoding);
     }
 
     /**
