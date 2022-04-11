@@ -20,6 +20,11 @@
             "homepage": "http://www.ameos.com/"
         }
     ],
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "ameos_mailredirect"
+        }
+    },
     "autoload": {
         "psr-4": {
             "Ameos\\AmeosMailredirect\\": "Classes"
