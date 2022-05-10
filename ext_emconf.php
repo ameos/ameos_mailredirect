@@ -19,11 +19,11 @@ $EM_CONF[$_EXTKEY] = [
     'clearCacheOnLoad' => 0,
     'lockType'         => '',
     'author_company'   => 'Ameos',
-    'version'          => '1.2.3',
+    'version'          => '1.2.4',
     'constraints'      => [
         'depends'      => [
             'typo3' => '8.7.0-11.5.99',
-            'php'   => '5.5.0-7.3.99'
+            'php'   => '7.0.0-7.4.99'
         ],
         'conflicts' => [],
         'suggests'  => [],
