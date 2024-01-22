@@ -1,0 +1,14 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Ameos\AmeosMailredirect\:
+    resource: "../Classes/*"
+
+  Ameos\AmeosMailredirect\EventListener\BeforeMailerSentMessage:
+    tags:
+      - name: event.listener
+        identifier: "ameos/mailredirect/beforemailersentmessage"
+        event: TYPO3\CMS\Core\Mail\Event\BeforeMailerSentMessageEvent
