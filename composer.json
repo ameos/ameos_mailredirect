@@ -4,13 +4,13 @@
     "type": "typo3-cms-extension",
     "homepage": "https://github.com/ameos/ameos_mailredirect",
     "require": {
-        "typo3/cms-core": "^10 | ^11 | dev-master",
-        "php": ">=7.0.0"
+        "typo3/cms-core": "^12",
+        "php": ">=8.0.0"
     },
     "keywords": [
         "TYPO3",
         "CMS",
-        "Form"
+        "Mail"
     ],
     "license": "GPL-3.0-or-later",
     "authors": [
@@ -29,6 +29,5 @@
         "psr-4": {
             "Ameos\\AmeosMailredirect\\": "Classes"
         }
-    },
-    "version": "2.0.0"
+    }
 }
