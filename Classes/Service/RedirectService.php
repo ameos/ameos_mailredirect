@@ -65,6 +65,23 @@ class RedirectService
     }
 
     /**
+     * Returns recipients
+     * @return array
+     */
+    public function getRecipientsRaw(): array
+    {
+        $out = [];
+        $array = GeneralUtility::trimExplode(
+            ';',
+            $this->extensionConfiguration->get('ameos_mailredirect', 'recipient')
+        );
+        foreach ($array as $v) {
+            $out[$v] = '';
+        }
+        return $out;
+    }
+
+    /**
      * Returns recipients for copy
      * 
      * @return array
