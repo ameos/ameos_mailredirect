@@ -12,3 +12,9 @@ services:
       - name: event.listener
         identifier: "ameos/mailredirect/beforemailersentmessage"
         event: TYPO3\CMS\Core\Mail\Event\BeforeMailerSentMessageEvent
+
+  Ameos\AmeosMailredirect\EventListener\LuxSendMailSendNewsletterBeforeMailMessageEvent:
+    tags:
+      - name: event.listener
+        identifier: "ameos/mailredirect/luxsendmailsendnewsletterbeforeMailmessageevent"
+        event: In2code\Luxletter\Events\SendMailSendNewsletterBeforeMailMessageEvent
