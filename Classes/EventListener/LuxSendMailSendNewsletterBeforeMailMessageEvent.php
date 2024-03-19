@@ -36,11 +36,11 @@ class LuxSendMailSendNewsletterBeforeMailMessageEvent
             }
 
             if ($this->redirectService->isEnabled()) {
-                $originalRecipients = array_keys($event->getReceiver());
-                $originalRecipientsCopy = $this->redirectService->symfonyToAdress($message->getCc());
+                $originalRecipients = array_keys($event->getReceiver());                
                 
-                $receiver = $this->redirectService->getRecipientsRaw();
-                $message->setTo($receiver);
+                $message->setTo(
+                    $this->redirectService->getRecipientsRaw()
+                );
 
                 $message->html(
                     sprintf(
@@ -60,6 +60,8 @@ class LuxSendMailSendNewsletterBeforeMailMessageEvent
             }
 
             if ($this->redirectService->isCopyEnabled()) {
+                $originalRecipientsCopy = $this->redirectService->symfonyToAdress($message->getCc());
+
                 $message->html(
                     sprintf(
                         '%s<br />Cc : %s',
