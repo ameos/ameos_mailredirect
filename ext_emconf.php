@@ -22,7 +22,7 @@ $EM_CONF['ameos_mailredirect'] = [
     'version'          => '3.1.2',
     'constraints'      => [
         'depends'      => [
-            'typo3' => '12.4.0-12.4.99',
+            'typo3' => '12.4.0-13.4.99',
             'php'   => '8.0.0-8.3.99'
         ],
         'conflicts' => [],
