@@ -38,41 +38,49 @@ class BeforeMailerSentMessage
             if ($this->redirectService->isEnabled()) {
                 $originalRecipients = $this->redirectService->symfonyToAdress($message->getTo());
                 $message->to(...$this->redirectService->getRecipients());
-                $message->html(
-                    sprintf(
-                        '%s<br />To : %s',
-                        $message->getHtmlBody(),
-                        implode(';', $originalRecipients)
-                    )
-                );
-                $message->text(
-                    sprintf(
-                        '%s%sTo : %s',
-                        $message->getTextBody(),
-                        chr(10),
-                        implode(';', $originalRecipients)
-                    )
-                );
+                if($message->getHtmlBody()){
+                    $message->html(
+                        sprintf(
+                            '%s<br />To : %s',
+                            $message->getHtmlBody(),
+                            implode(';', $originalRecipients)
+                        )
+                    );
+                }
+                if($message->getTextBody()){
+                    $message->text(
+                        sprintf(
+                            '%s%sTo : %s',
+                            $message->getTextBody(),
+                            chr(10),
+                            implode(';', $originalRecipients)
+                        )
+                    );
+                }
             }
 
             if ($this->redirectService->isCopyEnabled()) {
                 $originalRecipients = $this->redirectService->symfonyToAdress($message->getCc());
                 $message->cc(...$this->redirectService->getRecipientsForCopy());
-                $message->html(
-                    sprintf(
-                        '%s<br />Cc : %s',
-                        $message->getHtmlBody(),
-                        implode(';', $originalRecipients)
-                    )
-                );
-                $message->text(
-                    sprintf(
-                        '%s%sCc : %s',
-                        $message->getTextBody(),
-                        chr(10),
-                        implode(';', $originalRecipients)
-                    )
-                );
+                if($message->getHtmlBody()){
+                    $message->html(
+                        sprintf(
+                            '%s<br />Cc : %s',
+                            $message->getHtmlBody(),
+                            implode(';', $originalRecipients)
+                        )
+                    );
+                }
+                if($message->getTextBody()){
+                    $message->text(
+                        sprintf(
+                            '%s%sCc : %s',
+                            $message->getTextBody(),
+                            chr(10),
+                            implode(';', $originalRecipients)
+                        )
+                    );
+                }
             }
         }
     }
